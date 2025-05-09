@@ -121,7 +121,7 @@
         ],
         [
           { top: "😍 ", bottom: "Highlight" },
-          { top: "🤯 ", bottom: "Überraschend" },
+          { top: "😃 ", bottom: "Überraschend" },
           { top: "🥱 ", bottom: "Langweilig" },
           { top: "🤩 ", bottom: "Beeindruckt" },
           { top: "🤣 ", bottom: "Witzig" },
@@ -131,8 +131,8 @@
 
       let spinning = false;
 
-      // Warteschlange für Namen (Reel 1)
       let nameQueue = shuffle([...reelSymbols[0]]);
+      let feedbackQueue = [...reelSymbols[1]];
 
       function displaySymbol(reelId, symbol, index) {
         const reel = document.getElementById(reelId);
@@ -182,15 +182,17 @@
             let finalSymbol;
 
             if (index === 0) {
-              // Reel 1 – Name aus Queue
+              // Reel 1 – Namen aus Queue
               if (nameQueue.length === 0) {
                 nameQueue = shuffle([...reelSymbols[0]]);
               }
-              finalSymbol = nameQueue.shift(); // nächsten Namen holen
+              finalSymbol = nameQueue.shift();
             } else {
-              // Reel 2 – Zufällige Bewertung
-              const randomIndex = Math.floor(Math.random() * symbols.length);
-              finalSymbol = symbols[randomIndex];
+              // Reel 2 – Bewertungen aus Queue
+              if (feedbackQueue.length === 0) {
+                feedbackQueue = shuffle([...reelSymbols[1]]);
+              }
+              finalSymbol = feedbackQueue.shift();
             }
 
             displaySymbol(reelId, finalSymbol, index);
