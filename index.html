@@ -131,6 +131,9 @@
 
       let spinning = false;
 
+      // Warteschlange für Namen (Reel 1)
+      let nameQueue = shuffle([...reelSymbols[0]]);
+
       function displaySymbol(reelId, symbol, index) {
         const reel = document.getElementById(reelId);
 
@@ -146,7 +149,6 @@
         }
       }
 
-      // Hilfsfunktion zum Mischen eines Arrays (Fisher-Yates)
       function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -154,9 +156,6 @@
         }
         return array;
       }
-
-      // Warteschlange für Namen (Reel 1)
-      let nameQueue = shuffle([...reelSymbols[0]]);
 
       function spin() {
         if (spinning) return;
