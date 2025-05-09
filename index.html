@@ -165,14 +165,32 @@
         const finalSymbols = [];
         let finished = 0;
 
+        const rainbowColors = [
+          "#FF0000", // Rot
+          "#FF7F00", // Orange
+          "#FFFF00", // Gelb
+          "#00FF00", // Grün
+          "#0000FF", // Blau
+          "#4B0082", // Indigo
+          "#9400D3", // Violett
+        ];
+
         [0, 1].forEach((index) => {
           const reelId = `reel${index + 1}`;
           const symbols = reelSymbols[index];
           let counter = 0;
 
+          const colorOffset = index * 3; // linker Reel: 0, rechter Reel: 3
+
           const interval = setInterval(() => {
             const symbol = symbols[counter % symbols.length];
             displaySymbol(reelId, symbol, index);
+
+            // Regenbogenfarbe mit Offset anwenden
+            const reel = document.getElementById(reelId);
+            const colorIndex = (counter + colorOffset) % rainbowColors.length;
+            reel.style.borderColor = rainbowColors[colorIndex];
+
             counter++;
           }, 100);
 
@@ -182,13 +200,11 @@
             let finalSymbol;
 
             if (index === 0) {
-              // Reel 1 – Namen aus Queue
               if (nameQueue.length === 0) {
                 nameQueue = shuffle([...reelSymbols[0]]);
               }
               finalSymbol = nameQueue.shift();
             } else {
-              // Reel 2 – Bewertungen aus Queue
               if (feedbackQueue.length === 0) {
                 feedbackQueue = shuffle([...reelSymbols[1]]);
               }
@@ -196,8 +212,10 @@
             }
 
             displaySymbol(reelId, finalSymbol, index);
-            finalSymbols[index] = finalSymbol.top;
 
+            const reel = document.getElementById(reelId);
+
+            finalSymbols[index] = finalSymbol.top;
             finished++;
             if (finished === 2) {
               spinning = false;
